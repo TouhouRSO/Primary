@@ -72,6 +72,12 @@ Support: 3
 
 ==========
 
+Remilia
+Character: 1
+Event: 7
+Spell: 10
+Support: 4
+
 Sakuya
 Character: 1
 Event: 7
