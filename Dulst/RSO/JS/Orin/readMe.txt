@@ -1,8 +1,8 @@
-NAME
-Character: 
+Orin
+Character: 1
 Event: 
-Spell: 
-Support: 
+Spell: 10
+Support: 3
 
-XX:XX PM 02/25/2014 (+08:00 GMT)
+04:05 PM 02/26/2014 (+08:00 GMT)
   - Created.
