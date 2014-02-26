@@ -72,6 +72,12 @@ Support: 3
 
 ==========
 
+Reisen
+Character: 1
+Event: 4
+Spell: 10
+Support: 6
+
 Remilia
 Character: 1
 Event: 7
