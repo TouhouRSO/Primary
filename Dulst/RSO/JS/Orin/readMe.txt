@@ -1,6 +1,6 @@
 Orin
 Character: 1
-Event: 
+Event: 5
 Spell: 10
 Support: 3
 
