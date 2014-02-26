@@ -1,6 +1,6 @@
 Remilia
 Character: 1
-Event: 
+Event: 7
 Spell: 10
 Support: 4
 
