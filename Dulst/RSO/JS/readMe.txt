@@ -154,6 +154,12 @@ Event: 3
 Spell: 10
 Support: 7
 
+Prismriver
+Character: 3
+Event: 4
+Spell: 10
+Support: 7
+
 Ran
 Character: 1
 Event: 3
