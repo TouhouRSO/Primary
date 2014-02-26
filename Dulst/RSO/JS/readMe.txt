@@ -72,6 +72,12 @@ Support: 3
 
 ==========
 
+Ran
+Character: 1
+Event: 3
+Spell: 10
+Support: 6
+
 Reimu
 Character: 1
 Event: 4
