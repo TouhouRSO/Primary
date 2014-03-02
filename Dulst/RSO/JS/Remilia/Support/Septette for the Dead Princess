@@ -17,23 +17,35 @@
   },
   {
     "action": {
-      "primary": "verify target",
-      "comparisonOperators": ">=",
-      "value": "3"
+      "primary": "verify target"
     },
     "target": {
       "primary": "card",
-      "cardProperty": "count",
       "criteria": {
-        "from": "board",
         "player": "owner",
-        "name": "Hourai Doll"
+        "class": "Leader&&Vampire",
+        "type": "Character"
+      }
+    },
+    "effectName": "verifyPlayer"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "C1",
+      "criteria": {
+        "player": "owner",
+        "class": "Leader",
+        "type": "Character"
       }
     },
     "effectComplete": {
-      "primary": "nothing"
+      "primary": "trigger next effect"
     },
-    "effectName": "dollCount"
+    "effectName": "leaderNameA"
   },
   {
     "action": {
@@ -44,15 +56,14 @@
       "criteria": {
         "from": "board",
         "player": "owner",
-        "class": "Alice",
-        "type": "Spell",
-        "stat": "stat-targetableByOwnSpecials>=1"
+        "class": "effect leaderNameA",
+        "type": "Spell"
       }
     },
     "effectComplete": {
       "primary": "trigger next effect"
     },
-    "effectName": "card"
+    "effectName": "selectedCardsA"
   },
   {
     "action": {
@@ -68,7 +79,7 @@
       "primary": "card",
       "cardProperty": "av",
       "criteria": {
-        "passing": "card"
+        "passing": "selectedCardsA"
       }
     },
     "effectComplete": {
@@ -90,7 +101,7 @@
       "primary": "card",
       "cardProperty": "iv",
       "criteria": {
-        "passing": "card"
+        "passing": "selectedCardsA"
       }
     },
     "effectComplete": {
@@ -100,8 +111,8 @@
   {
     "action": {
       "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "1",
+      "operation": "+",
+      "magnitude": "2",
       "undo": {
         "primary": "game event",
         "event": "post-battlePhase"
@@ -109,9 +120,9 @@
     },
     "target": {
       "primary": "card",
-      "cardProperty": "isOnFlag",
+      "cardProperty": "hv",
       "criteria": {
-        "passing": "this card"
+        "passing": "selectedCardsA"
       }
     },
     "effectComplete": {
@@ -128,7 +139,7 @@
     "target": {
       "primary": "card",
       "criteria": {
-        "passing": "card"
+        "passing": "selectedCardsA"
       }
     }
   },
@@ -146,59 +157,53 @@
   },
   {
     "action": {
-      "primary": "trigger on event",
-      "event": {
-        "primary": "post-moveCard"
-      },
-      "undo": {
-        "primary": "game event",
-        "event": "post-battlePhase"
-      }
+      "primary": "verify target"
     },
     "target": {
       "primary": "card",
       "criteria": {
-        "player": "owner",
-        "class": "Doll&&Leader",
-        "name": "Hourai Doll",
-        "type": "Support"
+        "player": "opponent",
+        "class": "Leader&&Vampire",
+        "type": "Character"
       }
-    }
+    },
+    "effectName": "verifyOpp"
   },
   {
     "action": {
-      "primary": "verify target",
-      "comparisonOperators": "==",
-      "value": "1"
+      "primary": "assign variable"
     },
     "target": {
       "primary": "card",
-      "cardProperty": "isOnFlag",
+      "cardProperty": "C1",
       "criteria": {
-        "passing": "this card"
-      }
-    }
-  },
-  {
-    "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "0",
-      "undo": {
-        "primary": "game event",
-        "event": "post-battlePhase"
-      }
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "isOnFlag",
-      "criteria": {
-        "passing": "this card"
+        "player": "opponent",
+        "class": "Leader",
+        "type": "Character"
       }
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    }
+    },
+    "effectName": "leaderNameB"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "board",
+        "player": "opponent",
+        "class": "effect leaderNameB",
+        "type": "Spell"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "selectedCardsB"
   },
   {
     "action": {
@@ -214,12 +219,13 @@
       "primary": "card",
       "cardProperty": "av",
       "criteria": {
-        "passing": "card"
+        "passing": "selectedCardsB"
       }
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    }
+    },
+    "effectName": "modifyCard"
   },
   {
     "action": {
@@ -235,7 +241,7 @@
       "primary": "card",
       "cardProperty": "iv",
       "criteria": {
-        "passing": "card"
+        "passing": "selectedCardsB"
       }
     },
     "effectComplete": {
@@ -244,14 +250,36 @@
   },
   {
     "action": {
-      "primary": "run effect",
-      "effectNumber": "effect dollCount",
-      "callback": "effect completion"
+      "primary": "modify stats",
+      "operation": "+",
+      "magnitude": "2",
+      "undo": {
+        "primary": "game event",
+        "event": "post-battlePhase"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "hv",
+      "criteria": {
+        "passing": "selectedCardsB"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "trigger event",
+      "event": {
+        "primary": "gainedStat"
+      }
     },
     "target": {
       "primary": "card",
       "criteria": {
-        "passing": "this card"
+        "passing": "selectedCardsB"
       }
     }
   }
