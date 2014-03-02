@@ -18,18 +18,16 @@
   {
     "action": {
       "primary": "verify target",
-      "verifyTrue": "verifySuccess"
+      "comparisonOperators": ">=",
+      "value": "1"
     },
     "target": {
-      "primary": "card",
-      "criteria": {
-        "player": "owner",
-        "class": "Battle Spell",
-        "stat": "stat-targetableByOwnEvents>=1"
-      }
+      "primary": "owner",
+      "playerProperty": "yourTurn"
     },
     "effectComplete": {
-      "primary": "trigger next effect"
+      "primary": "trigger effect",
+      "effectNumber": "verifyFail"
     }
   },
   {
@@ -38,16 +36,125 @@
     },
     "target": {
       "primary": "card",
+      "count": "1",
       "criteria": {
-        "player": "opponent",
-        "class": "Battle Spell",
-        "stat": "stat-targetableByOppEvents>=1"
+        "from": "board",
+        "player": "owner",
+        "name": "Koakuma"
       }
     },
     "effectComplete": {
       "primary": "trigger effect",
       "effectNumber": "verifyFail"
     }
+  },
+  {
+    "action": {
+      "primary": "each"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "board",
+        "player": "owner",
+        "name": "Koakuma"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "verifyFlag"
+    },
+    "effectName": "eachKoakuma"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "effect-equipTarget",
+      "criteria": {
+        "passing": "eachKoakuma"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "ciid"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "board",
+        "player": "owner",
+        "type": "Spell",
+        "stat": "stat-ciid=effect ciid"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "koakumaSpell"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": ">=",
+      "value": "1",
+      "verifyTrue": "doNothing"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetableByOwnEvents",
+      "criteria": {
+        "passing": "koakumaSpell",
+        "from": "SecondRow"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "modify stats",
+      "operation": "=",
+      "magnitude": "1",
+      "undo": {
+        "primary": "game event",
+        "event": "newEffect"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "failFlag",
+      "criteria": {
+        "passing": "this card"
+      }
+    }
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "!=",
+      "value": "1"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "failFlag",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "verifyFail"
+    },
+    "effectName": "verifyFlag"
   },
   {
     "action": {
@@ -84,25 +191,134 @@
   },
   {
     "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "1",
-      "undo": {
-        "primary": "game event",
-        "event": "newEffect"
-      }
+      "primary": "assign variable"
     },
     "target": {
       "primary": "card",
-      "cardProperty": "qs",
+      "cardProperty": "count",
       "criteria": {
+        "from": "board",
         "player": "owner",
-        "class": "Battle Spell",
-        "stat": "stat-targetableByOwnEvents>=1"
+        "name": "Koakuma"
       }
     },
     "effectComplete": {
       "primary": "trigger next effect"
+    },
+    "effectName": "koaCount"
+  },
+  {
+    "action": {
+      "primary": "each"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "board",
+        "player": "owner",
+        "name": "Koakuma"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "proceedToEffectB"
+    },
+    "effectName": "eachKoakumaB"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "effect-equipTarget",
+      "criteria": {
+        "passing": "eachKoakumaB"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "ciid"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "board",
+        "player": "owner",
+        "type": "Spell",
+        "stat": "stat-ciid=effect ciid"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "koakumaSpellB"
+  },
+  {
+    "action": {
+      "primary": "trigger event",
+      "event": {
+        "primary": "targetedByEvent"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "koakumaSpellB"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "send card to",
+      "location": "FirstRow",
+      "player": "owner",
+      "stackLocation": "top"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "koakumaSpellB"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "set to attack position"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "koakumaSpellB"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "trigger event",
+      "event": {
+        "primary": "activate"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "koakumaSpellB"
+      }
     }
   },
   {
@@ -112,21 +328,23 @@
       "magnitude": "1",
       "undo": {
         "primary": "game event",
-        "event": "newEffect"
+        "event": "post-battlePhase"
       }
     },
     "target": {
       "primary": "card",
       "cardProperty": "qs",
       "criteria": {
-        "player": "opponent",
-        "class": "Battle Spell",
-        "stat": "stat-targetableByOppEvents>=1"
+        "from": "SecondRow",
+        "player": "owner",
+        "type": "Spell",
+        "stat": "stat-targetableByOwnEvents>=1 && stat-lvl<=1"
       }
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    }
+    },
+    "effectName": "proceedToEffectB"
   },
   {
     "action": {
@@ -136,17 +354,90 @@
       "primary": "card",
       "selector": {
         "primary": "owner",
-        "instructions": "Select 1 Spell to give Guided Bullets and +X AV to, X being the base AV of the Spell."
+        "instructions": "Select up to X Level 0-1 Reserve Spells from your side to activate, X being the number of Koakuma Supports on your side."
       },
-      "count": "1",
+      "count": "effect koaCount",
       "criteria": {
-        "class": "Battle Spell",
+        "from": "SecondRow",
+        "type": "Spell",
         "stat": "stat-qs>=1"
-      },
-      "mandatory": "selectedCard"
+      }
     },
     "effectComplete": {
       "primary": "trigger next effect"
+    },
+    "effectName": "card"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": ">=",
+      "value": "1"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "count",
+      "criteria": {
+        "passing": "card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "card"
+    },
+    "effectName": "count"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "selector": {
+        "primary": "owner",
+        "instructions": "Viewing the selected cards. Click \"Finish Select\" to continue, or click on any of the cards to re-select targets."
+      },
+      "count": "1",
+      "criteria": {
+        "passing": "card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "confirm"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "<=",
+      "value": "0"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "count",
+      "criteria": {
+        "passing": "confirm"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "card"
+    }
+  },
+  {
+    "action": {
+      "primary": "each"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "afterEffect"
     },
     "effectName": "selectedCard"
   },
@@ -169,18 +460,13 @@
   },
   {
     "action": {
-      "primary": "modify stats",
-      "operation": "+",
-      "magnitude": "1",
-      "undo": {
-        "primary": "game event",
-        "event": "post-battlePhase"
-      }
+      "primary": "send card to",
+      "location": "FirstRow",
+      "player": "owner",
+      "stackLocation": "top"
     },
     "target": {
       "primary": "card",
-      "cardProperty": "Guided Bullets",
-      "count": "1",
       "criteria": {
         "passing": "selectedCard"
       }
@@ -191,34 +477,10 @@
   },
   {
     "action": {
-      "primary": "assign variable"
+      "primary": "set to attack position"
     },
     "target": {
       "primary": "card",
-      "cardProperty": "oAV",
-      "criteria": {
-        "passing": "selectedCard"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    },
-    "effectName": "oAV"
-  },
-  {
-    "action": {
-      "primary": "modify stats",
-      "operation": "+",
-      "magnitude": "effect oAV",
-      "undo": {
-        "primary": "game event",
-        "event": "post-battlePhase"
-      }
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "av",
-      "count": "1",
       "criteria": {
         "passing": "selectedCard"
       }
@@ -231,10 +493,7 @@
     "action": {
       "primary": "trigger event",
       "event": {
-        "primary": [
-          "gainedStat",
-          "gainedBasicAbility"
-        ]
+        "primary": "activate"
       }
     },
     "target": {
@@ -242,9 +501,6 @@
       "criteria": {
         "passing": "selectedCard"
       }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
     }
   },
   {
@@ -261,7 +517,8 @@
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    }
+    },
+    "effectName": "afterEffect"
   },
   {
     "action": {
