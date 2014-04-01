@@ -102,20 +102,6 @@
   },
   {
     "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "1"
-    },
-    "target": {
-      "primary": "game",
-      "gameProperty": "MOVE"
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
-  },
-  {
-    "action": {
       "primary": "assign variable"
     },
     "target": {
@@ -129,23 +115,6 @@
       "primary": "trigger next effect"
     },
     "effectName": "card"
-  },
-  {
-    "action": {
-      "primary": "send card to",
-      "location": "Board facedown",
-      "player": "target card owner",
-      "silent": "silent"
-    },
-    "target": {
-      "primary": "card",
-      "criteria": {
-        "passing": "card"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
   },
   {
     "action": {
@@ -180,19 +149,34 @@
       },
       "count": "1",
       "criteria": {
-        "passing": "card",
-        "type": [
-          "Support",
-          "Event"
-        ]
+        "passing": "card"
       },
       "mandatory": "selectedCard"
     },
     "effectComplete": {
-      "primary": "trigger effect",
-      "effectNumber": "afterEffect"
+      "primary": "trigger next effect"
     },
     "effectName": "selectedCard"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "verifyTrue": "afterEffect"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "selectedCard",
+        "type": [
+          "Support",
+          "Event"
+        ]
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "selectedCard"
+    }
   },
   {
     "action": {
@@ -218,41 +202,6 @@
   {
     "action": {
       "primary": "send card to",
-      "location": "hand",
-      "player": "target card owner",
-      "silent": "silent"
-    },
-    "target": {
-      "primary": "card",
-      "criteria": {
-        "passing": "card"
-      },
-      "exclude": {
-        "passing": "selectedCard"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    },
-    "effectName": "afterEffect"
-  },
-  {
-    "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "0"
-    },
-    "target": {
-      "primary": "game",
-      "gameProperty": "MOVE"
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
-  },
-  {
-    "action": {
-      "primary": "send card to",
       "location": "afterlife",
       "player": "target card owner"
     },
@@ -264,7 +213,8 @@
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    }
+    },
+    "effectName": "afterEffect"
   },
   {
     "action": {

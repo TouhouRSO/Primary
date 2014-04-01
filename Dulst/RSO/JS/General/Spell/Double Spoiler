@@ -40,7 +40,7 @@
   },
   {
     "action": {
-      "primary": "show card"
+      "primary": "assign variable"
     },
     "target": {
       "primary": "card",
@@ -51,7 +51,8 @@
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    }
+    },
+    "effectName": "card"
   },
   {
     "action": {
@@ -61,26 +62,13 @@
       "primary": "card",
       "selector": {
         "primary": "owner",
-        "instructions": "Viewing the opponent's hand."
+        "instructions": "Viewing the opponent's hand. Click Finish Select to proceed."
       },
+      "count": "1",
       "criteria": {
-        "from": "hand",
-        "player": "opponent"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
-  },
-  {
-    "action": {
-      "primary": "trigger event",
-      "event": {
-        "primary": "handTargetedByEvent"
-      }
-    },
-    "target": {
-      "primary": "opponent"
+        "passing": "card"
+      },
+      "mandatory": "mandatory or random"
     }
   }
 ]
