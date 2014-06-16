@@ -213,7 +213,7 @@
       },
       "count": "1",
       "criteria": {
-        "stat": "stat-qs>=1"
+        "stat": "stat-qs>=1&&stat-sinkingFlag!=1"
       },
       "mandatory": "cardCount"
     },
@@ -224,30 +224,13 @@
   },
   {
     "action": {
-      "primary": "trigger event",
-      "event": {
-        "primary": "targetedByEvent"
-      }
+      "primary": "modify stats",
+      "operation": "=",
+      "magnitude": "1"
     },
     "target": {
       "primary": "card",
-      "criteria": {
-        "passing": "selectedCard"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
-  },
-  {
-    "action": {
-      "primary": "send card to",
-      "location": "deck",
-      "player": "target card owner",
-      "stackLocation": "bottom"
-    },
-    "target": {
-      "primary": "card",
+      "cardProperty": "sinkingFlag",
       "criteria": {
         "passing": "selectedCard"
       }
@@ -278,6 +261,20 @@
   },
   {
     "action": {
+      "primary": "modify stats",
+      "operation": "+",
+      "magnitude": "1"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetCardCount"
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
       "primary": "verify target",
       "comparisonOperators": "<=",
       "value": "0",
@@ -289,7 +286,7 @@
       "criteria": {
         "from": "board",
         "type": "Support",
-        "stat": "stat-qs>=1"
+        "stat": "stat-qs>=1&&stat-sinkingFlag!=1"
       },
       "exclude": {
         "class": "Scene"
@@ -319,6 +316,90 @@
   },
   {
     "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "selector": {
+        "primary": "owner",
+        "instructions": "Select one card to send to the bottom of its owner's deck."
+      },
+      "count": "1",
+      "criteria": {
+        "stat": "stat-sinkingFlag>=1"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "afterEffect"
+  },
+  {
+    "action": {
+      "primary": "trigger event",
+      "event": {
+        "primary": "targetedByEvent"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "afterEffect"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "send card to",
+      "location": "deck",
+      "player": "target card owner",
+      "stackLocation": "bottom"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "afterEffect"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "modify stats",
+      "operation": "-",
+      "magnitude": "1"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetCardCount"
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": ">=",
+      "value": "1",
+      "verifyTrue": "afterEffect"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetCardCount"
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "LoopAfterEffect"
+  },
+  {
+    "action": {
       "primary": "send card to",
       "location": "afterlife",
       "player": "owner"
@@ -331,8 +412,7 @@
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    },
-    "effectName": "afterEffect"
+    }
   },
   {
     "action": {
@@ -348,6 +428,19 @@
       "playerProperty": "sp"
     },
     "effectName": "spUse"
+  },
+  {
+    "action": {
+      "primary": "assign variable"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetCardCount",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectName": "targetCardCount"
   },
   {
     "action": {
@@ -403,7 +496,7 @@
       "primary": "give choice",
       "choiceType": "multiple choice",
       "choiceQuestion": "Do you want to stop selecting?",
-      "choices": "effect afterEffect Yes.\neffect selectedCard No."
+      "choices": "effect LoopAfterEffect Yes.\neffect selectedCard No."
     },
     "target": {
       "primary": "owner"

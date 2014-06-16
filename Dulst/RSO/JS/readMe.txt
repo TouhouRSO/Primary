@@ -1,3 +1,5 @@
+Note: Yo katon, done till Suwako, including team cards.
+
 JS File goes here.
 
 Please Identify Effect scripts & Rule scripts when Adding new Scripts.
@@ -216,7 +218,7 @@ Support: 2
 
 Suwako
 Character: 1
-Event: 6
+Event: 5
 Spell: 10
 Support: 4
 
