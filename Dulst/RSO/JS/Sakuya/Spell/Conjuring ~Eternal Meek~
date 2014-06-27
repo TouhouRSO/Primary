@@ -3,7 +3,7 @@
     "action": {
       "primary": "verify target",
       "comparisonOperators": ">=",
-      "value": "1"
+      "value": "2"
     },
     "target": {
       "primary": "owner",
@@ -17,22 +17,6 @@
   },
   {
     "action": {
-      "primary": "assign variable"
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "effect-equipTarget",
-      "criteria": {
-        "passing": "this card"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    },
-    "effectName": "ciid"
-  },
-  {
-    "action": {
       "primary": "verify target",
       "comparisonOperators": ">=",
       "value": "1"
@@ -41,9 +25,7 @@
       "primary": "card",
       "cardProperty": "targetableByOwnSpecials",
       "criteria": {
-        "from": "board",
-        "class": "Battle Spell",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card"
       }
     },
     "effectComplete": {
@@ -93,8 +75,7 @@
     "target": {
       "primary": "card",
       "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card"
       }
     },
     "effectComplete": {
@@ -105,7 +86,7 @@
     "action": {
       "primary": "modify stats",
       "operation": "+",
-      "magnitude": "1",
+      "magnitude": "2",
       "undo": {
         "primary": "game event",
         "event": "post-battlePhase"
@@ -113,10 +94,9 @@
     },
     "target": {
       "primary": "card",
-      "cardProperty": "av",
+      "cardProperty": "hv",
       "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card"
       }
     },
     "effectComplete": {
@@ -133,8 +113,7 @@
     "target": {
       "primary": "card",
       "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card"
       }
     },
     "effectComplete": {
@@ -145,7 +124,7 @@
     "action": {
       "primary": "modify stats",
       "operation": "-",
-      "magnitude": "1"
+      "magnitude": "2"
     },
     "target": {
       "primary": "owner",
@@ -174,6 +153,23 @@
   },
   {
     "action": {
+      "primary": "trigger event",
+      "event": {
+        "primary": "post-useSpecial"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
       "primary": "modify stats",
       "operation": "=",
       "magnitude": "0"
@@ -185,76 +181,10 @@
         "passing": "this card"
       }
     },
+    "effectComplete": {
+      "primary": "nothing"
+    },
     "effectName": "verifyFail"
-  },
-  {
-    "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "0"
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "qualifiedTarget",
-      "criteria": {
-        "from": "board",
-        "type": "Spell"
-      },
-      "exclude": {
-        "class": "Ran"
-      }
-    },
-    "effectName": "verifyTarget"
-  },
-  {
-    "action": {
-      "primary": "assign variable"
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "effect-equipTarget",
-      "criteria": {
-        "passing": "this card"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    },
-    "effectName": "passive"
-  },
-  {
-    "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "1"
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "shikigami",
-      "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect passive"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
-  },
-  {
-    "action": {
-      "primary": "assign variable"
-    },
-    "target": {
-      "primary": "card",
-      "cardProperty": "effect-equipTarget",
-      "criteria": {
-        "passing": "this card"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    },
-    "effectName": "ciid"
   },
   {
     "action": {
@@ -268,7 +198,37 @@
     },
     "effectComplete": {
       "primary": "trigger effect",
-      "effectNumber": "passiveb"
+      "effectNumber": "undoA,undoB,undoC"
+    },
+    "effectName": "passive"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "!=",
+      "value": "1"
+    },
+    "target": {
+      "primary": "owner",
+      "playerProperty": "yourTurn"
+    },
+    "effectComplete": {
+      "primary": "nothing"
+    },
+    "effectName": "startEffect"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "==",
+      "value": "Battle"
+    },
+    "target": {
+      "primary": "game",
+      "gameProperty": "phase"
+    },
+    "effectComplete": {
+      "primary": "nothing"
     }
   },
   {
@@ -281,8 +241,8 @@
       "primary": "card",
       "cardProperty": "targetableByOwnSpecials",
       "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card",
+        "stat": "stat-disableSpecial!=1"
       }
     },
     "effectComplete": {
@@ -293,24 +253,22 @@
     "action": {
       "primary": "modify stats",
       "operation": "+",
-      "magnitude": "1",
+      "magnitude": "2",
       "undo": {
-        "primary": "game event",
-        "event": "post-battlePhase"
+        "primary": "verify false",
+        "verifyEffectIndex": "verifyRed,verifyBP,verifySpecial"
       }
     },
     "target": {
       "primary": "card",
       "cardProperty": "hv",
       "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card"
       }
     },
     "effectComplete": {
       "primary": "trigger next effect"
-    },
-    "effectName": "modifyCard"
+    }
   },
   {
     "action": {
@@ -322,8 +280,7 @@
     "target": {
       "primary": "card",
       "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
+        "passing": "this card"
       }
     }
   },
@@ -331,55 +288,97 @@
     "action": {
       "primary": "trigger on event",
       "event": {
-        "primary": [
-          "pre-battlePhase",
-          "pre-replPhase"
-        ]
+        "primary": "post-statChange"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetableByOwnSpecials",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectName": "undoA"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": ">=",
+      "value": "1",
+      "verifyTrue": "startEffect"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "targetableByOwnSpecials",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "startEffect"
+    },
+    "effectName": "verifyRed"
+  },
+  {
+    "action": {
+      "primary": "trigger on event",
+      "event": {
+        "primary": "post-statChange"
+      }
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "disableSpecial",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectName": "undoB"
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "!=",
+      "value": "1",
+      "verifyTrue": "startEffect"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "disableSpecial",
+      "criteria": {
+        "passing": "this card"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger effect",
+      "effectNumber": "startEffect"
+    },
+    "effectName": "verifySpecial"
+  },
+  {
+    "action": {
+      "primary": "trigger on event",
+      "event": {
+        "primary": "post-battlePhase"
       }
     },
     "target": {
       "primary": "game"
     },
-    "effectName": "passiveb"
+    "effectName": "undoC"
   },
   {
     "action": {
-      "primary": "modify stats",
-      "operation": "=",
-      "magnitude": "1",
-      "undo": {
-        "primary": "game event",
-        "event": "post-battlePhase"
-      }
+      "primary": "verify target",
+      "comparisonOperators": "==",
+      "value": "Battle",
+      "verifyTrue": "doNothing"
     },
     "target": {
-      "primary": "card",
-      "cardProperty": "shikigami",
-      "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
-      }
+      "primary": "game",
+      "gameProperty": "phase"
     },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
-  },
-  {
-    "action": {
-      "primary": "trigger event",
-      "event": {
-        "primary": "gainedShikigami"
-      }
-    },
-    "target": {
-      "primary": "card",
-      "criteria": {
-        "from": "board",
-        "stat": "stat-ciid=effect ciid"
-      }
-    },
-    "effectComplete": {
-      "primary": "trigger next effect"
-    }
+    "effectName": "verifyBP"
   }
 ]

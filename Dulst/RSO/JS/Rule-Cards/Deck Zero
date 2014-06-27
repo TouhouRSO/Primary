@@ -1,0 +1,111 @@
+[
+  {
+    "ruleTrigger": {
+      "primary": "start",
+      "player": "turn player"
+    },
+    "action": {
+      "primary": "trigger on event",
+      "event": {
+        "primary": "post-moveCard",
+        "to": [
+          "afterlife",
+          "hand",
+          "Board faceup",
+          "Board facedown"
+        ]
+      }
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "type": [
+          "Spell",
+          "Support",
+          "Event"
+        ]
+      }
+    }
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "<=",
+      "value": "0",
+      "verifyTrue": "youLose"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "count",
+      "criteria": {
+        "from": "deck",
+        "player": "owner"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    }
+  },
+  {
+    "action": {
+      "primary": "verify target",
+      "comparisonOperators": "<=",
+      "value": "0",
+      "verifyTrue": "youWin"
+    },
+    "target": {
+      "primary": "card",
+      "cardProperty": "count",
+      "criteria": {
+        "from": "deck",
+        "player": "opponent"
+      }
+    }
+  },
+  {
+    "action": {
+      "primary": "show card"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "hand"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "youLose"
+  },
+  {
+    "action": {
+      "primary": "win match"
+    },
+    "target": {
+      "primary": "opponent"
+    }
+  },
+  {
+    "action": {
+      "primary": "show card"
+    },
+    "target": {
+      "primary": "card",
+      "criteria": {
+        "from": "hand"
+      }
+    },
+    "effectComplete": {
+      "primary": "trigger next effect"
+    },
+    "effectName": "youWin"
+  },
+  {
+    "action": {
+      "primary": "win match"
+    },
+    "target": {
+      "primary": "owner"
+    }
+  }
+]
